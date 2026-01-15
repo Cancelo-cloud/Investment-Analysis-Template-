@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Analysis Template</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .company-name {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .company-description {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+            line-height: 1.6;
+        }
+
+        .company-sector {
+            font-size: 14px;
+            opacity: 0.8;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .question-block {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid #2a5298;
+        }
+
+        .question-title {
+            font-size: 22px;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .question-number {
+            background: #2a5298;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        .calculation-steps {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid #e0e0e0;
+        }
+
+        .calculation-step {
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .calculation-label {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .result {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 20px;
+        }
+
+        .rating-label {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .rating-score {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2a5298;
+        }
+
+        .stars {
+            display: flex;
+            gap: 5px;
+        }
+
+        .star {
+            font-size: 24px;
+        }
+
+        .star.filled {
+            color: #ffd700;
+        }
+
+        .star.empty {
+            color: #ddd;
+        }
+
+        .description-text {
+            line-height: 1.8;
+            color: #444;
+            margin: 10px 0;
+        }
+
+        .final-score {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+            border-radius: 12px;
+        }
+
+        .final-score-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .final-score-value {
+            font-size: 72px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .verdict {
+            font-size: 20px;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .verdict.excellent {
+            background: rgba(76, 175, 80, 0.2);
+            color: #2e7d32;
+        }
+
+        .verdict.good {
+            background: rgba(33, 150, 243, 0.2);
+            color: #1565c0;
+        }
+
+        .verdict.fair {
+            background: rgba(255, 193, 7, 0.2);
+            color: #f57c00;
+        }
+
+        .verdict.poor {
+            background: rgba(244, 67, 54, 0.2);
+            color: #c62828;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #2196f3;
+        }
+
+        .info-box-title {
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .company-name {
+                font-size: 28px;
+            }
+            
+            .question-title {
+                font-size: 18px;
+            }
+            
+            .final-score-value {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER SECTION -->
+        <div class="header">
+            <div class="company-name">[COMPANY NAME]</div>
+            <div class="company-description">
+                [Brief 1-2 sentence description of what the company does and why it matters]
+            </div>
+            <div class="company-sector">
+                Sector: [Technology / Healthcare / Finance / Consumer / Energy / etc.]
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="content">
+            
+            <!-- QUESTION 1: P/E RATIO -->
+            <div class="question-block">
+                <div class="question-title">
+                    <div>
+                        <span class="question-number">1</span>
+                        P/E Ratio — "Am I overpaying?"
+                    </div>
+                </div>
+                
+                <div class="calculation-steps">
+                    <div class="calculation-label">Step 1: Find Stock Price</div>
+                    <div class="calculation-step">Stock Price = $[XXX.XX]</div>
+                    
+                    <div class="calculation-label">Step 2: Find Trailing Twelve Months (TTM) EPS</div>
+                    <div class="calculation-step">TTM EPS = $[XX.XX]</div>
+                    <div class="calculation-step" style="font-size: 12px; color: #888;">
+                        (Source: Yahoo Finance → Statistics → Earnings Per Share TTM)
+                    </div>
+                    
+                    <div class="calculation-label">Step 3: Calculate P/E Ratio</div>
+                    <div class="calculation-step">P/E = Stock Price ÷ TTM EPS</div>
+                    <div class="calculation-step">P/E = $[XXX.XX] ÷ $[XX.XX] = [XX.X]</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-title">PEG Ratio (P/E adjusted for growth)</div>
+                    <div class="calculation-step">Expected Growth Rate: [XX]%/year</div>
+                    <div class="calculation-step">PEG = P/E ÷ Growth Rate</div>
+                    <div class="calculation-step">PEG = [XX.X] ÷ [XX] = [X.XX]</div>
+                    <div style="margin-top: 10px; font-size: 13px;">
+                        • PEG < 1 = Undervalued<br>
+                        • PEG 1-2 = Fair value<br>
+                        • PEG > 2 = Overvalued
+                    </div>
+                </div>
+
+                <div class="result">
+                    P/E: [XX.X] | PEG: [X.XX] | Interpretation: [Cheap / Fair / Expensive]
+                </div>
+
+                <div class="rating">
+                    <span class="rating-label">Valuation Rating:</span>
+                    <span class="rating-score">[X]/10</span>
+                    <div class="stars">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star empty">★</span>
+                        <span class="star empty">★</span>
+                        <span class="star empty">★</span>
+                        <span class="star empty">★</span>
+                        <span class="star empty">★</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTION 2: TECHNICAL CHART -->
+            <div class="question-block">
+                <div class="question-title">
+                    <div>
+                        <span class="question-number">2</span>
+                        Technical Chart — "Is this a good entry point?"
+                    </div>
+                </div>
+
+                <div class="description-text">
+                    <strong>Daily Chart Analysis:</strong><br>
+                    [Describe trend: uptrend/downtrend/sideways. Identify support/resistance levels. Note volume patterns. Mention any chart patterns (Elliott Waves, head & shoulders, etc.)]
+                </div>
+
+                <div class="description-text">
+                    <strong>Weekly Chart Analysis:</strong><br>
+                    [Describe longer-term trend. Major support/resistance zones. Overall momentum.]
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-title">Entry Strategy</div>
+                    <div>[Current price at support / Near resistance (wait for pullback) / Breaking out with volume / etc.]</div>
+                    <div style="margin-top: 8px;"><strong>Stop-loss level:</strong> $[XX.XX]</div>
+                    <div><strong>Target price:</strong> $[XXX.XX]</div>
+                </div>
+
+                <div class="result">
+                    Chart Setup: [Excellent / Good / Fair / Poor]
+                </div>
+
+                <div class="rating">
+                    <span class="rating-label">Technical Rating:</span>
+                    <span class="rating-score">[X]/10</span>
+                    <div class="stars">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star empty">★</span>
+                        <span class="star empty">★</span>
+                        <span class="star empty">★</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTION 3: MOAT -->
+            <div class="question-block">
+                <div class="question-title">
+                    <div>
+                        <span class="question-number">3</span>
+                        Moat — "Can competitors steal market share?"
+                    </div>
+                </div>
+
+                <div class="description-text">
+                    <strong>What They Do (Simple Explanation):</strong><br>
+                    [Explain the business in 2-3 sentences that a 12-year-old would understand]
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-title">Moat Type & Strength</div>
+                    <div style="margin-top: 10px;">
+                        <strong>Primary Moat:</strong> [Monopoly/Duopoly / Network Effects / Brand / Cost Advantage / Switching Costs]
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <strong>Why It's Defensible:</strong><br>
+                        [Explain what makes it hard for competitors to replicate this business. Think: "If Elon Musk or Jeff Bezos wanted to compete tomorrow with unlimited money, could they win?"]
+                    </div>
+                </div>
+
+                <div class="description-text">
+                    <strong>Competitive Advantages:</strong><br>
+                    • [Advantage 1: e.g., 3 billion users locked into ecosystem]<br>
+                    • [Advantage 2: e.g., Proprietary technology with 20-year lead]<br>
+                    • [Advantage 3: e.g., Lowest cost producer in industry]
+                </div>
+
+                <div class="result">
+                    Moat Strength: [Impenetrable / Very Strong / Moderate / Weak]
+                </div>
+
+                <div class="rating">
+                    <span class="rating-label">Moat Rating:</span>
+                    <span class="rating-score">[X]/10</span>
+                    <div class="stars">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star empty">★</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTION 4: REVENUE GROWTH -->
+            <div class="question-block">
+                <div class="question-title">
+                    <div>
+                        <span class="question-number">4</span>
+                        Revenue Growth — "Is this business expanding or dying?"
+                    </div>
+                </div>
+
+                <div class="calculation-steps">
+                    <div class="calculation-label">Revenue History (Last 3-5 Years)</div>
+                    <div class="calculation-step">2024: $[XXX]B</div>
+                    <div class="calculation-step">2023: $[XXX]B</div>
+                    <div class="calculation-step">2022: $[XXX]B</div>
+                    <div class="calculation-step">2021: $[XXX]B</div>
+                    <div class="calculation-step" style="font-size: 12px; color: #888;">
+                        (Source: Yahoo Finance → Financials → Annual Revenue)
+                    </div>
+                    
+                    <div class="calculation-label">Year-over-Year Growth</div>
+                    <div class="calculation-step">2023→2024: [+XX]%</div>
+                    <div class="calculation-step">2022→2023: [+XX]%</div>
+                    <div class="calculation-step">2021→2022: [+XX]%</div>
+                    
+                    <div class="calculation-label">Average Annual Growth Rate</div>
+                    <div class="calculation-step">Average: [XX]%/year</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-title">Growth Interpretation</div>
+                    <div style="margin-top: 8px;">
+                        • 20%+ = Hyper-growth (buy if moat strong)<br>
+                        • 10-20% = Healthy expansion (buy if P/E reasonable)<br>
+                        • 5-10% = Mature growth (buy only if dividends strong)<br>
+                        • 0-5% = Stagnant (avoid unless deep value)<br>
+                        • Negative = Declining (avoid—turnarounds rarely work)
+                    </div>
+                </div>
+
+                <div class="result">
+                    Growth Trend: [Accelerating / Steady / Slowing / Declining]
+                </div>
+
+                <div class="rating">
+                    <span class="rating-label">Growth Rating:</span>
+                    <span class="rating-score">[X]/10</span>
+                    <div class="stars">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star empty">★</span>
+                        <span class="star empty">★</span>
+                        <span class="star empty">★</span>
+                        <span class="star empty">★</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTION 5: PROFIT MARGINS -->
+            <div class="question-block">
+                <div class="question-title">
+                    <div>
+                        <span class="question-number">5</span>
+                        Profit Margins — "Is this actually making money?"
+                    </div>
+                </div>
+
+                <div class="calculation-steps">
+                    <div class="calculation-label">Calculate Net Profit Margin</div>
+                    <div class="calculation-step">Net Income (most recent year): $[XX]B</div>
+                    <div class="calculation-step">Revenue (most recent year): $[XXX]B</div>
+                    <div class="calculation-step">Profit Margin = (Net Income ÷ Revenue) × 100</div>
+                    <div class="calculation-step">Profit Margin = ($[XX]B ÷ $[XXX]B) × 100 = [XX]%</div>
+                    <div class="calculation-step" style="font-size: 12px; color: #888;">
+                        (Source: TradingView → Financials → Income Statement → Annual)
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-title">Industry Benchmarks</div>
+                    <div style="margin-top: 8px;">
+                        • Software/SaaS: 20-40%<br>
+                        • Semiconductors: 15-25%<br>
+                        • Consumer Goods: 8-15%<br>
+                        • Retail: 2-5%<br>
+                        • Airlines: 0-5%
+                    </div>
+                </div>
+
+                <div class="description-text">
+                    <strong>Margin Trend:</strong><br>
+                    [Are margins expanding (good), stable (okay), or shrinking (bad)? Compare to competitors.]
+                </div>
+
+                <div class="result">
+                    Profit Margin: [XX]% | Trend: [Expanding / Stable / Shrinking]
+                </div>
+
+                <div class="rating">
+                    <span class="rating-label">Profitability Rating:</span>
+                    <span class="rating-score">[X]/10</span>
+                    <div class="stars">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star empty">★</span>
+                        <span class="star empty">★</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTION 6: DEBT-TO-EQUITY -->
+            <div class="question-block">
+                <div class="question-title">
+                    <div>
+                        <span class="question-number">6</span>
+                        Debt-to-Equity Ratio — "Can this survive a crisis?"
+                    </div>
+                </div>
+
+                <div class="calculation-steps">
+                    <div class="calculation-label">Calculate Debt-to-Equity Ratio</div>
+                    <div class="calculation-step">Total Debt: $[XX]B</div>
+                    <div class="calculation-step">Shareholder Equity: $[XX]B</div>
+                    <div class="calculation-step">Debt-to-Equity = Total Debt ÷ Shareholder Equity</div>
+                    <div class="calculation-step">D/E = $[XX]B ÷ $[XX]B = [X.XX]</div>
+                    <div class="calculation-step" style="font-size: 12px; color: #888;">
+                        (Source: TradingView → Financials → Balance Sheet → Annual)
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-title">Risk Assessment</div>
+                    <div style="margin-top: 8px;">
+                        • D/E < 0.5 = Very safe (fortress balance sheet)<br>
+                        • D/E 0.5-1.0 = Moderate (acceptable if business stable)<br>
+                        • D/E 1.0-2.0 = High risk (vulnerable in downturn)<br>
+                        • D/E > 2.0 = Very risky (bankruptcy risk)
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <strong>Note:</strong> REITs and utilities normally have higher D/E (2-3x is acceptable). Banks have 10-15x (their business IS lending).
+                    </div>
+                </div>
+
+                <div class="description-text">
+                    <strong>Financial Stability:</strong><br>
+                    [Can the company pay its debts from operating cash flow? How many years to pay off debt at current profit rate?]
+                </div>
+
+                <div class="result">
+                    D/E Ratio: [X.XX] | Safety Level: [Very Safe / Moderate / High Risk]
+                </div>
+
+                <div class="rating">
+                    <span class="rating-label">Financial Safety Rating:</span>
+                    <span class="rating-score">[X]/10</span>
+                    <div class="stars">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FINAL SCORE -->
+        <div class="final-score">
+            <div class="final-score-title">OVERALL INVESTMENT SCORE</div>
+            <div class="final-score-value">[X.X]/10</div>
+            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 20px;">
+                Average of all 6 ratings
+            </div>
+            
+            <div class="verdict excellent">
+                <!-- Change class to: excellent (8-10) / good (6-7.9) / fair (4-5.9) / poor (<4) -->
+                <strong>VERDICT:</strong> [BUY / HOLD / AVOID]<br>
+                <div style="margin-top: 10px; font-size: 16px;">
+                    [Summary: This stock scores [X.X]/10 based on fundamentals and technicals. Strengths: [list 2-3]. Weaknesses: [list 1-2]. Recommendation: [Buy if price drops to $X / Hold current position / Sell and rotate into better opportunities].]
+                </div>
+            </div>
+
+            <div style="margin-top: 25px; font-size: 14px; opacity: 0.8;">
+                Analysis Date: [DD/MM/YYYY] | Analyst: [Your Name]
+            </div>
+        </div>
+    </div>
+</body>
+</html>
